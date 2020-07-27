@@ -1,4 +1,3 @@
-
 import numpy
 
 # In computing the multiple regression coefficients, inputted data is
@@ -10,76 +9,90 @@ import numpy
 
 
 # Multiplies two matrices
-# ([r x k] * [k x c] -> [r x c])
+# Input: Two matrices of multiplicable dimensions ([r x k] * [k x c] -> [r x c])
+# Output: Product of two matrices
 # Runtime: O(k^3)
-def multiply(first_matrix, second_matrix):
-    if len(first_matrix[0]) != len(second_matrix):
+def multiply(firstMatrix, secondMatrix):
+    if len(firstMatrix[0]) != len(secondMatrix):
         raise RuntimeError("Matrices must have shared dimension")
     # Create new matrix of appropriate size
-    rows = len(first_matrix)
-    columns = len(second_matrix[0])
-    shared_dimension = len(first_matrix[0])
-    new_matrix = [[0 for i in range(columns)] for j in range(rows)]
+    rows = len(firstMatrix)
+    columns = len(secondMatrix[0])
+    sharedDimension = len(firstMatrix[0])
+    newMatrix = [[0 for c in range(columns)] for r in range(rows)]
     # Fill in cells
-    for i in range(shared_dimension):
-        for j in range(shared_dimension):
-            sum_products = 0
-            for z in range(shared_dimension):
-                sum_products += first_matrix[i][z] * second_matrix[z][j]
-            new_matrix[i][j] = sum_products
-    return new_matrix
+    for i in range(rows):
+        for j in range(columns):
+            sumProducts = 0
+            for z in range(sharedDimension):
+                sumProducts += firstMatrix[i][z] * secondMatrix[z][j]
+            newMatrix[i][j] = sumProducts
+    return newMatrix
 
 
 # Transposes a matrix
+# Input: A matrix
+# Output: Transpose of matrix
 # Runtime: O(nm)
 def transpose(matrix):
     # Create new matrix of appropriate size
     # [m x n] -> [n x m]
     rows = len(matrix[0])
     columns = len(matrix)
-    new_matrix = [[0 for i in range(columns)] for j in range(rows)]
+    newMatrix = [[0 for i in range(columns)] for j in range(rows)]
     for i in range(columns):
         for j in range(rows):
-            new_matrix[j][i] = matrix[i][j]
-    return new_matrix
+            newMatrix[j][i] = matrix[i][j]
+    return newMatrix
 
 
 # Utilizes Numpy's built-in pseudo-inverse function, which gives an approximate
 # inverse in the event the matrix is not invertible
-# An alternative (but inefficient on large matrices) solution is to manually implement inversion by cofactors
+# A manual solution (but inefficient on large matrices) is to implement inversion by cofactors
+# Input: A matrix
+# Output: Inverted (or approximately inverted) matrix
 # Runtime: O(n^3)
 def inverse(matrix):
-    return numpy.linalg.pinv(matrix)
+    return numpy.linalg.inv(matrix)
 
 
-# Outputs a [k x 1] array containing multiple regression coefficients
-# Explanatory data must a [n x k] array
-# Response data must be a [n x 1] array, n > k
-# Runtime:
-def multiple_regression(explanatory_data, response_data):
-    if len(explanatory_data) != len(response_data):
-        raise RuntimeError("Must be one response per row of explanatory data")
-    t_explanatory = transpose(explanatory_data)
-    inverted = inverse(multiply(t_explanatory, explanatory_data))
-    coeffs = multiply(multiply(inverted, t_explanatory), response_data)
-    return coeffs
+# Computes multiple regression coefficients given 2D array representation of data
+# Input: Explanatory data as an [n x k] array, response data as an [n x 1] array, n > K
+# Output: [1 x (k+1)] array containing multiple regression coefficients
+#         Index 0 is the intercept, indices 1 to k contain coefficients
+# Runtime: O(n^3)
+def regression(explanatoryData, responseData):
+    if len(explanatoryData) != len(responseData):
+        raise RuntimeError("Must have one response per row of explanatory data")
+    # Add leftmost column of 1s
+    for i in range(len(explanatoryData)):
+        explanatoryData[i].insert(0, 1)
+    # Calculate coefficient matrix
+    tExplanatory = transpose(explanatoryData)
+    multiplied = multiply(tExplanatory, explanatoryData)
+    inverted = inverse(multiplied)
+    coeffMatrix2d = multiply(multiply(inverted, tExplanatory), responseData)
+    # Coeff matrix is currently in form of 2D array, but can be represented
+    # as a 1D array
+    coeffMatrix = [0 for i in range(len(coeffMatrix2d))]
+    for i in range(len(coeffMatrix)):
+        coeffMatrix[i] = coeffMatrix2d[i][0]
+    return coeffMatrix
 
 
-matrix_a = [[0, 2], [3, 1]]
-matrix_b = [[4, 8], [2, 9]]
-matrix_c = [[3, 4, 5], [1, 2, 3], [4, 5, 6]]
-matrix_d = [[3, 4, 5], [1, 2, 3], [1, 2, 3]]
-matrix_e = [[2, 5], [3, 7], [4, 5]]
-test_matrix1 = multiply(matrix_a, matrix_b)
-test_matrix2 = multiply(matrix_c, matrix_d)
-test_matrix3 = transpose(matrix_c)
-test_matrix4 = transpose(matrix_e)
-print(test_matrix1)
-print(test_matrix2)
-print(test_matrix3)
-print(test_matrix4)
-
-x_data = [[3, 2], [3, 5], [2, 6]]
-y_data = [[4], [2], [2]]
-coefficients = multiple_regression(x_data, y_data)
-print(coefficients)
+# Converts coefficient matrix to presentable equation
+# Input: Array of length n containing regression coefficients
+# Output: String representation of multiple regression model
+# Runtime: O(n)
+def convertToEquation(coeffMatrix):
+    str_coeffs = " + "
+    for j in range(1, len(coeffMatrix)):
+        coeff = coeffMatrix[j]
+        sign = "+"
+        if coeff < 0:
+            sign = "-"
+        if j == len(coeffMatrix) - 1:
+            str_coeffs += str(abs(coeff)) + "(x" + str(j) + ") "
+        else:
+            str_coeffs += str(abs(coeff)) + "(x" + str(j) + ") " + sign + " "
+    return "y = " + str(coeffMatrix[0]) + str_coeffs

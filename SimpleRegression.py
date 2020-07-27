@@ -1,15 +1,13 @@
 import BasicStats
 
 
-# Outputs the line of best fit for two data sets in the form y = mx + b
+# Outputs the slope and intercept for the line of best fit for given data
+# Input: Two datasets of equal length
+# Output: Array containing regression coefficients: [slope, intercept]
 # Runtime: O(n)
-def simple_regression(x_arr, y_arr):
-    slope = BasicStats.correlation(x_arr, y_arr) * BasicStats.stdev(y_arr) / BasicStats.stdev(x_arr)
-    x_mean = BasicStats.mean(x_arr)
-    y_mean = BasicStats.mean(y_arr)
-    intercept = y_mean - (slope * x_mean)
-    return "y = " + str(slope) + "x + " + str(intercept)
-
-
-# Should be y = 0.6224x + 10.2169
-print(simple_regression([5, 10, 3, 50, 10, 2, 4, 8], [10, 12, 6, 44, 7, 30, 16, 14]))
+def model(xArr, yArr):
+    slope = BasicStats.correlation(xArr, yArr) * BasicStats.stdev(yArr, False) / BasicStats.stdev(xArr, False)
+    xMean = BasicStats.mean(xArr)
+    yMean = BasicStats.mean(yArr)
+    intercept = yMean - (slope * xMean)
+    return [slope, intercept]
