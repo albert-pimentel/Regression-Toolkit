@@ -1,6 +1,5 @@
  # Regression-Toolkit
-Computes summary statistics, utilizes linear algebra to compute regression models including
-simple and multiple regression as well as visualizations in Python.
+Computes summary statistics, creates simple and multiple linear regression models using linear algebra, and visualizes models in Python.
 
 The intent of this project from the standpoint of the developer is to learn more about
 Python, data science, and applications of linear algebra. From a user or business 
