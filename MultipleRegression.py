@@ -11,39 +11,37 @@ import numpy
 # Multiplies two matrices
 # Input: Two matrices of multiplicable dimensions ([r x k] * [k x c] -> [r x c])
 # Output: Product of two matrices
-# Runtime: O(k^3)
-def multiply(firstMatrix, secondMatrix):
-    if len(firstMatrix[0]) != len(secondMatrix):
+def multiply(first_matrix, second_matrix):
+    if len(first_matrix[0]) != len(second_matrix):
         raise RuntimeError("Matrices must have shared dimension")
     # Create new matrix of appropriate size
-    rows = len(firstMatrix)
-    columns = len(secondMatrix[0])
-    sharedDimension = len(firstMatrix[0])
-    newMatrix = [[0 for c in range(columns)] for r in range(rows)]
+    rows = len(first_matrix)
+    columns = len(second_matrix[0])
+    shared_dimension = len(first_matrix[0])
+    new_matrix = [[0 for c in range(columns)] for r in range(rows)]
     # Fill in cells
     for i in range(rows):
         for j in range(columns):
-            sumProducts = 0
-            for z in range(sharedDimension):
-                sumProducts += firstMatrix[i][z] * secondMatrix[z][j]
-            newMatrix[i][j] = sumProducts
-    return newMatrix
+            sum_products = 0
+            for z in range(shared_dimension):
+                sum_products += first_matrix[i][z] * second_matrix[z][j]
+            new_matrix[i][j] = sum_products
+    return new_matrix
 
 
 # Transposes a matrix
 # Input: A matrix
 # Output: Transpose of matrix
-# Runtime: O(nm)
 def transpose(matrix):
     # Create new matrix of appropriate size
     # [m x n] -> [n x m]
     rows = len(matrix[0])
     columns = len(matrix)
-    newMatrix = [[0 for i in range(columns)] for j in range(rows)]
+    new_matrix = [[0 for i in range(columns)] for j in range(rows)]
     for i in range(columns):
         for j in range(rows):
-            newMatrix[j][i] = matrix[i][j]
-    return newMatrix
+            new_matrix[j][i] = matrix[i][j]
+    return new_matrix
 
 
 # Utilizes Numpy's built-in pseudo-inverse function, which gives an approximate
@@ -51,7 +49,6 @@ def transpose(matrix):
 # A manual solution (but inefficient on large matrices) is to implement inversion by cofactors
 # Input: A matrix
 # Output: Inverted (or approximately inverted) matrix
-# Runtime: O(n^3)
 def inverse(matrix):
     return numpy.linalg.inv(matrix)
 
@@ -60,39 +57,37 @@ def inverse(matrix):
 # Input: Explanatory data as an [n x k] array, response data as an [n x 1] array, n > K
 # Output: [1 x (k+1)] array containing multiple regression coefficients
 #         Index 0 is the intercept, indices 1 to k contain coefficients
-# Runtime: O(n^3)
-def regression(explanatoryData, responseData):
-    if len(explanatoryData) != len(responseData):
+def regression(explanatory_data, response_data):
+    if len(explanatory_data) != len(response_data):
         raise RuntimeError("Must have one response per row of explanatory data")
     # Add leftmost column of 1s
-    for i in range(len(explanatoryData)):
-        explanatoryData[i].insert(0, 1)
+    for i in range(len(explanatory_data)):
+        explanatory_data[i].insert(0, 1)
     # Calculate coefficient matrix
-    tExplanatory = transpose(explanatoryData)
-    multiplied = multiply(tExplanatory, explanatoryData)
+    t_explanatory = transpose(explanatory_data)
+    multiplied = multiply(t_explanatory, explanatory_data)
     inverted = inverse(multiplied)
-    coeffMatrix2d = multiply(multiply(inverted, tExplanatory), responseData)
+    coeff_matrix2d = multiply(multiply(inverted, t_explanatory), response_data)
     # Coeff matrix is currently in form of 2D array, but can be represented
     # as a 1D array
-    coeffMatrix = [0 for i in range(len(coeffMatrix2d))]
-    for i in range(len(coeffMatrix)):
-        coeffMatrix[i] = coeffMatrix2d[i][0]
-    return coeffMatrix
+    coeff_matrix = [0 for i in range(len(coeff_matrix2d))]
+    for i in range(len(coeff_matrix)):
+        coeff_matrix[i] = coeff_matrix2d[i][0]
+    return coeff_matrix
 
 
 # Converts coefficient matrix to presentable equation
 # Input: Array of length n containing regression coefficients
 # Output: String representation of multiple regression model
-# Runtime: O(n)
-def convertToEquation(coeffMatrix):
+def convert_to_equation(coeff_matrix):
     str_coeffs = " + "
-    for j in range(1, len(coeffMatrix)):
-        coeff = coeffMatrix[j]
+    for j in range(1, len(coeff_matrix)):
+        coeff = coeff_matrix[j]
         sign = "+"
         if coeff < 0:
             sign = "-"
-        if j == len(coeffMatrix) - 1:
+        if j == len(coeff_matrix) - 1:
             str_coeffs += str(abs(coeff)) + "(x" + str(j) + ") "
         else:
             str_coeffs += str(abs(coeff)) + "(x" + str(j) + ") " + sign + " "
-    return "y = " + str(coeffMatrix[0]) + str_coeffs
+    return "y = " + str(coeff_matrix[0]) + str_coeffs

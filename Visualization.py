@@ -8,9 +8,8 @@ import SimpleRegression
 # alongside the computed line of best fit
 # Input: Two arrays of equal length (n)
 # Output: None
-# Runtime: O(n)
-def drawSimpleRegression(xData, yData):
-    if len(xData) != len(yData):
+def draw_simple_regression(x_data, y_data):
+    if len(x_data) != len(y_data):
         raise RuntimeError("Must have one response data point per explanatory data point")
 
     # Set graph size based on screen resolution
@@ -20,23 +19,23 @@ def drawSimpleRegression(xData, yData):
     win = GraphWin("Simple Regression", width, height)
 
     # Draw title
-    titlePt = Point(width / 2, 25)
-    title = Text(titlePt, "Simple Regression Visualization")
-    subtitlePt = Point(width / 2, 45)
-    subtitle = Text(subtitlePt, "By Albert Pimentel")
+    title_pt = Point(width / 2, 25)
+    title = Text(title_pt, "Simple Regression Visualization")
+    subtitle_pt = Point(width / 2, 45)
+    subtitle = Text(subtitle_pt, "By Albert Pimentel")
     title.draw(win)
     subtitle.draw(win)
 
     # Draw axes
-    drawAxes(width, height, win)
+    draw_axes(width, height, win)
     # Mark x and y axes
-    labelXYAxes(width, height, win)
+    label_xy_axes(width, height, win)
     # Add markers along axes
-    addMarkers(width, height, win, xData, yData)
+    add_markers(width, height, win, x_data, y_data)
     # Draw points on graph
-    drawPoints(width, height, win, xData, yData,)
+    draw_points(width, height, win, x_data, y_data, )
     # Draw line of best fit
-    drawLineOfBestFit(width, height, win, xData, yData)
+    draw_line_of_best_fit(width, height, win, x_data, y_data)
     # Close window on click and after program ends
     win.getMouse()
     win.close()
@@ -45,13 +44,12 @@ def drawSimpleRegression(xData, yData):
 # Draws the X and Y axes of the graph
 # Input: Width of window, height of window, window object
 # Output: None
-# Runtime: O(1)
-def drawAxes(width, height, window):
-    topLeft = Point(50, 50)
-    bottomLeft = Point(50, height - 50)
-    bottomRight = Point(width - 50, height - 50)
-    line1 = Line(topLeft, bottomLeft)
-    line2 = Line(bottomLeft, bottomRight)
+def draw_axes(width, height, window):
+    top_left = Point(50, 50)
+    bottom_left = Point(50, height - 50)
+    bottom_right = Point(width - 50, height - 50)
+    line1 = Line(top_left, bottom_left)
+    line2 = Line(bottom_left, bottom_right)
     line1.draw(window)
     line2.draw(window)
 
@@ -59,64 +57,61 @@ def drawAxes(width, height, window):
 # Labels the X and Y axes of the graph
 # Input: Width of window, height of window, window object
 # Output: None
-# Runtime: O(1)
-def labelXYAxes(width, height, window):
+def label_xy_axes(width, height, window):
     # Mark x and y axes
-    xLabelPt = Point(40, 50)
-    xLabel = Text(xLabelPt, "y")
-    yLabelPt = Point(width - 50, height - 40)
-    yLabel = Text(yLabelPt, "x")
-    xLabel.draw(window)
-    yLabel.draw(window)
+    x_label_pt = Point(40, 50)
+    x_label = Text(x_label_pt, "y")
+    y_label_pt = Point(width - 50, height - 40)
+    y_label = Text(y_label_pt, "x")
+    x_label.draw(window)
+    y_label.draw(window)
 
 
 # Adds 10 markers along the axes of the graph to give a better idea
 # of where points lie
 # Input: Width of window, height of window, window object, explanatory data, response data
 # Output: None
-# Runtime: O(n)
-def addMarkers(width, height, window, xData, yData):
+def add_markers(width, height, window, x_data, y_data):
     # Add 10 markers along each axis
-    xIncrement = (width - 100) / 10
-    yIncrement = (height - 100) / -10
-    currentXCoord = 50
-    currentYCoord = height - 50
+    x_increment = (width - 100) / 10
+    y_increment = (height - 100) / -10
+    current_x_coord = 50
+    current_y_coord = height - 50
     for i in range(10):
         # Draw marker on x-axis
-        xPt1 = Point(currentXCoord, height - 60)
-        xPt2 = Point(currentXCoord, height - 40)
-        xLine = Line(xPt1, xPt2)
-        xLine.draw(window)
+        x_pt1 = Point(current_x_coord, height - 60)
+        x_pt2 = Point(current_x_coord, height - 40)
+        x_line = Line(x_pt1, x_pt2)
+        x_line.draw(window)
         # Place corresponding number below marker
-        xTextPt = Point(currentXCoord, height - 30)
-        xText = Text(xTextPt, str(min(xData) + (i * (max(xData) - min(xData)) / 10)))
-        xText.draw(window)
+        x_text_pt = Point(current_x_coord, height - 30)
+        x_text = Text(x_text_pt, str(min(x_data) + (i * (max(x_data) - min(x_data)) / 10)))
+        x_text.draw(window)
 
         # Draw marker on y-axis
-        yPt1 = Point(40, currentYCoord)
-        yPt2 = Point(60, currentYCoord)
-        yLine = Line(yPt1, yPt2)
-        yLine.draw(window)
+        y_pt1 = Point(40, current_y_coord)
+        y_pt2 = Point(60, current_y_coord)
+        y_line = Line(y_pt1, y_pt2)
+        y_line.draw(window)
         # Place corresponding number left of marker
-        yTextPt = Point(25, currentYCoord)
-        yText = Text(yTextPt, str(min(yData) + (i * (max(yData) - min(yData)) / 10)))
-        yText.draw(window)
+        y_text_pt = Point(25, current_y_coord)
+        y_text = Text(y_text_pt, str(min(y_data) + (i * (max(y_data) - min(y_data)) / 10)))
+        y_text.draw(window)
 
-        currentXCoord += xIncrement
-        currentYCoord += yIncrement
+        current_x_coord += x_increment
+        current_y_coord += y_increment
 
 
 # Draws set of all points from dataset onto screen
 # Input: Width of window, height of window, window object, explanatory data, response data
 # Output: None
-# Runtime: O(n)
-def drawPoints(width, height, window, xData, yData,):
-    xMax = max(xData)
-    xMin = min(xData)
-    yMax = max(yData)
-    yMin = min(yData)
-    for i in range(len(xData)):
-        pt = getPoint(xData[i], yData[i], xData, yData, width, height)
+def draw_points(width, height, window, x_data, y_data, ):
+    x_max = max(x_data)
+    x_min = min(x_data)
+    y_max = max(y_data)
+    y_min = min(y_data)
+    for i in range(len(x_data)):
+        pt = get_point(x_data[i], y_data[i], x_data, y_data, width, height)
         # Commented out code below explicitly displays coordinates next to points
         # t = Text(pt, "(" + str(x) + ", " + str(y) + ")" )
         # t.draw(window)
@@ -130,19 +125,18 @@ def drawPoints(width, height, window, xData, yData,):
 # Input: Explanatory data point, response data point, explanatory data, response data
 #        width of window, height of window
 # Output: Point object
-# Runtime: O(n)
-def getPoint(x, y, xData, yData, width, height):
-    xMax = max(xData)
-    xMin = min(xData)
-    yMax = max(yData)
-    yMin = min(yData)
-    xCoord = (x - xMin) / (xMax - xMin) * (width - 50)
-    yCoord = (y - yMin) / (yMax - yMin) * (height - 50)
-    if xCoord == 0:
-        xCoord += 50
-    if yCoord == height - 50:
-        yCoord -= 50
-    pt = Point(xCoord, height - 50 - yCoord)
+def get_point(x, y, x_data, y_data, width, height):
+    x_max = max(x_data)
+    x_min = min(x_data)
+    y_max = max(y_data)
+    y_min = min(y_data)
+    x_coord = (x - x_min) / (x_max - x_min) * (width - 50)
+    y_coord = (y - y_min) / (y_max - y_min) * (height - 50)
+    if x_coord == 0:
+        x_coord += 50
+    if y_coord == height - 50:
+        y_coord -= 50
+    pt = Point(x_coord, height - 50 - y_coord)
     return pt
 
 
@@ -150,18 +144,17 @@ def getPoint(x, y, xData, yData, width, height):
 # Input: Width of window, height of window, window object,
 #        explanatory data, response data
 # Output: None
-# Runtime: O(n)
-def drawLineOfBestFit(width, height, window, xData, yData):
-    model = SimpleRegression.model(xData, yData)
+def draw_line_of_best_fit(width, height, window, x_data, y_data):
+    model = SimpleRegression.model(x_data, y_data)
     slope = model[0]
     intercept = model[1]
-    leftPt = getPoint(min(xData), intercept, xData, yData, width, height)
-    yForMaxX = (slope * max(xData)) + intercept
-    rightPt = getPoint(max(xData), yForMaxX, xData, yData, width, height)
-    lineOfBestFit = Line(leftPt, rightPt)
-    lineOfBestFit.draw(window)
+    left_pt = get_point(min(x_data), intercept, x_data, y_data, width, height)
+    y_for_max_x = (slope * max(x_data)) + intercept
+    right_pt = get_point(max(x_data), y_for_max_x, x_data, y_data, width, height)
+    line_of_best_fit = Line(left_pt, right_pt)
+    line_of_best_fit.draw(window)
 
 
 # Sample visualization
-drawSimpleRegression([5, 7, 8, 13, 7, 5, 6, 10, 5, 3, 8, 4, 5, 9, 8, 3, 4, 6, 3, 13, 3, 6, 5],
-                     [6, 8, 10, 13, 6, 8, 7, 10, 6, 7, 7, 5, 7, 6, 8, 6, 5, 6, 3, 10, 5, 8, 5],)
+draw_simple_regression([5, 7, 8, 13, 7, 5, 6, 10, 5, 3, 8, 4, 5, 9, 8, 3, 4, 6, 3, 13, 3, 6, 5],
+                       [6, 8, 10, 13, 6, 8, 7, 10, 6, 7, 7, 5, 7, 6, 8, 6, 5, 6, 3, 10, 5, 8, 5], )
