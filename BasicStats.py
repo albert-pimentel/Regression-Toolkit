@@ -1,9 +1,6 @@
-
-
 # Returns the mean of a list of data
 # Input: Array of data
 # Output: Mean of data
-# Runtime: O(n)
 def mean(arr):
     total = 0
     for i in arr:
@@ -15,7 +12,6 @@ def mean(arr):
 # To-do: Improve to O(n) via select algorithm
 # Input: Array of data
 # Output: Median of data
-# Runtime: O(nlgn)
 def median(arr):
     arr = sorted(arr)
     length = len(arr)
@@ -29,48 +25,44 @@ def median(arr):
 # if stdev is for population, false for sample
 # Input: Dataset (arr), boolean (population)
 # Output: Standard deviation
-# Runtime: O(n)
 def stdev(arr, population):
     avg = mean(arr)
-    sqrResiduals = 0
+    sqr_residuals = 0
     for i in arr:
-        sqrResiduals += (i - avg)**2
+        sqr_residuals += (i - avg)**2
     if population:
-        return (sqrResiduals / (len(arr)))**(1/2)
-    return (sqrResiduals / (len(arr) - 1))**(1/2)
+        return (sqr_residuals / (len(arr)))**(1/2)
+    return (sqr_residuals / (len(arr) - 1))**(1/2)
 
 
 # Returns the correlation between two data sets of equal length
 # Input: Two datasets of equal length
 # Output: Correlation between two datasets
-# Runtime: O(n)
-def correlation(xArr, yArr):
-    if len(xArr) != len(yArr):
+def correlation(x_arr, y_arr):
+    if len(x_arr) != len(y_arr):
         raise RuntimeError("Data sets must be of equal length")
-    residualProduct = 0
-    xMean = mean(xArr)
-    yMean = mean(yArr)
-    xStdev = stdev(xArr, False)
-    yStdev = stdev(yArr, False)
-    for i in range(len(xArr)):
-        xResidual = (xArr[i] - xMean) / xStdev
-        yResidual = (yArr[i] - yMean) / yStdev
-        residualProduct += xResidual * yResidual
-    return residualProduct / (len(xArr) - 1)
+    residual_product = 0
+    x_mean = mean(x_arr)
+    y_mean = mean(y_arr)
+    x_stdev = stdev(x_arr, False)
+    y_stdev = stdev(y_arr, False)
+    for i in range(len(x_arr)):
+        x_residual = (x_arr[i] - x_mean) / x_stdev
+        y_residual = (y_arr[i] - y_mean) / y_stdev
+        residual_product += x_residual * y_residual
+    return residual_product / (len(x_arr) - 1)
 
 
 # Returns the range of a list of data
 # Input: Array of data
 # Output: Max of data - min of data
-# Runtime: O(n)
-def dataRange(arr):
+def data_range(arr):
     return max(arr) - min(arr)
 
 
 # Returns the mode(s) of a list of data
 # Input: Array of data
 # Output: Set of most frequently appearing numbers
-# Runtime: O(n)
 def mode(arr):
     # Map each number in the data to its frequency
     freq = {}
@@ -79,10 +71,10 @@ def mode(arr):
     for entry in arr:
         freq[entry] += 1
     # Find the maximum frequency of any number in the data set
-    maxFreq = max(freq.values())
+    max_freq = max(freq.values())
     # Return the set of keys mapped to maximum frequency
     modes = []
     for entry in freq.keys():
-        if freq[entry] == maxFreq:
+        if freq[entry] == max_freq:
             modes.append(entry)
     return modes
